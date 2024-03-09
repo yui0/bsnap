@@ -19,7 +19,7 @@
 // For very short-lived functions, it is fine to call them on the main isolate.
 // They will block the Dart execution while running the native function, so
 // only do this for native functions which are guaranteed to be short-lived.
-FFI_PLUGIN_EXPORT intptr_t sum(intptr_t a, intptr_t b) { return a + b; }
+/*FFI_PLUGIN_EXPORT intptr_t sum(intptr_t a, intptr_t b) { return a + b; }
 
 // A longer-lived native function, which occupies the thread calling it.
 //
@@ -34,7 +34,7 @@ FFI_PLUGIN_EXPORT intptr_t sum_long_running(intptr_t a, intptr_t b) {
   usleep(5000 * 1000);
 #endif
   return a + b;
-}
+}*/
 
 // internal
 //  https://github.com/Tencent/ncnn/blob/master/examples/yolox.cpp

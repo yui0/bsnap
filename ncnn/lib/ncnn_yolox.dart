@@ -53,7 +53,7 @@ final DynamicLibrary _dylib = () {
 final NcnnYoloxBindings _bindings = NcnnYoloxBindings(_dylib);
 
 
-/// A request to compute `sum`.
+/*/// A request to compute `sum`.
 ///
 /// Typically sent from one isolate to another.
 class _SumRequest {
@@ -128,4 +128,4 @@ Future<SendPort> _helperIsolateSendPort = () async {
   // Wait until the helper isolate has sent us back the SendPort on which we
   // can start sending requests.
   return completer.future;
-}();
+}();*/

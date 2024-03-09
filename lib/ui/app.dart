@@ -21,12 +21,12 @@ class MyApp extends StatelessWidget {
         name: 'global-observer',
         builder: (context) {
           return MaterialApp(
-            title: 'YoloX Demo',
+            title: 'bsnap',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
               useMaterial3: true,
             ),
-            home: const HomePage(title: 'YoloX Demo'),
+            home: const HomePage(title: 'bsnap'),
           );
         },
       ),
