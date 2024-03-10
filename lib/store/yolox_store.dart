@@ -63,12 +63,12 @@ abstract class YoloxBase with Store {
     final timebeg = DateTime.now();
     // await Future.delayed(const Duration(seconds: 5));
 
+    final modelPath = 'assets/yolox_nano_fp16.bin';
+    final paramPath = 'assets/yolox_nano_fp16.param';
     /*final modelPath = await _copyAssetToLocal('assets/yolox_nano_fp16.bin',
         package: 'ncnn_yolox', notCopyIfExist: false);
     final paramPath = await _copyAssetToLocal('assets/yolox_nano_fp16.param',
         package: 'ncnn_yolox', notCopyIfExist: false);*/
-    final modelPath = 'assets/yolox_nano_fp16.bin';
-    final paramPath = 'assets/yolox_nano_fp16.param';
     log.info('yolox modelPath=$modelPath');
     log.info('yolox paramPath=$paramPath');
     //print('yolox modelPath=$modelPath');

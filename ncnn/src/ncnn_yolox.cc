@@ -88,8 +88,15 @@ class YoloV5Focus : public ncnn::Layer {
 
 DEFINE_LAYER_CREATOR(YoloV5Focus)
 
+struct Rect {
+  float x;
+  float y;
+  float width;
+  float height;
+};
 struct Object {
-  cv::Rect_<float> rect;
+  Rect rect;
+  //cv::Rect_<float> rect;
   int label;
   float prob;
 };
@@ -101,8 +108,24 @@ struct GridAndStride {
 };
 
 static inline float intersection_area(const Object& a, const Object& b) {
-  cv::Rect_<float> inter = a.rect & b.rect;
-  return inter.area();
+  //cv::Rect_<float> inter = a.rect & b.rect;
+  //return inter.area();
+  Rect inter;
+  if (a.rect.x < b.rect.x) {
+    inter.x = b.rect.x;
+    inter.width = (a.rect.width -(b.rect.x -a.rect.x));
+  } else {
+    inter.x = a.rect.x;
+    inter.width = (b.rect.width -(a.rect.x -b.rect.x));
+  }
+  if (a.rect.y < b.rect.y) {
+    inter.y = b.rect.y;
+    inter.height = (a.rect.height -(b.rect.y -a.rect.y));
+  } else {
+    inter.y = a.rect.x;
+    inter.height = (b.rect.height -(a.rect.y -b.rect.y));
+  }
+  return inter.width * inter.height;
 }
 
 static void qsort_descent_inplace(std::vector<Object>& faceobjects, int left, int right) {
@@ -153,7 +176,8 @@ static void nms_sorted_bboxes(const std::vector<Object>& faceobjects, std::vecto
 
   std::vector<float> areas(n);
   for (int i = 0; i < n; i++) {
-    areas[i] = faceobjects[i].rect.area();
+    //areas[i] = faceobjects[i].rect.area();
+    areas[i] = faceobjects[i].rect.width * faceobjects[i].rect.height;
   }
 
   for (int i = 0; i < n; i++) {
@@ -355,7 +379,7 @@ FFI_PLUGIN_EXPORT yolox_err_t detectWithPixels(
 
   int count = picked.size();
 
-  using Obj = struct ::Object;
+  using Obj = struct::Object;
   Obj *obj = (Obj *) malloc(count * sizeof(Obj));
 
   for (int i = 0; i < count; i++) {
