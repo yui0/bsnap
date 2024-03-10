@@ -9,6 +9,9 @@ import 'package:mobx/mobx.dart';
 import 'package:ncnn_yolox/ncnn_yolox_bindings_generated.dart' as yo;
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
+//import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+//import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+//import 'package:wfile/wfile.dart';
 
 import '../util/image.dart';
 import '../util/log.dart';
@@ -60,12 +63,16 @@ abstract class YoloxBase with Store {
     final timebeg = DateTime.now();
     // await Future.delayed(const Duration(seconds: 5));
 
-    final modelPath = await _copyAssetToLocal('assets/yolox_nano_fp16.bin',
+    /*final modelPath = await _copyAssetToLocal('assets/yolox_nano_fp16.bin',
         package: 'ncnn_yolox', notCopyIfExist: false);
     final paramPath = await _copyAssetToLocal('assets/yolox_nano_fp16.param',
-        package: 'ncnn_yolox', notCopyIfExist: false);
+        package: 'ncnn_yolox', notCopyIfExist: false);*/
+    final modelPath = 'assets/yolox_nano_fp16.bin';
+    final paramPath = 'assets/yolox_nano_fp16.param';
     log.info('yolox modelPath=$modelPath');
     log.info('yolox paramPath=$paramPath');
+    //print('yolox modelPath=$modelPath');
+    //debugPrint('yolox modelPath=$modelPath');
 
     final modelPathUtf8 = modelPath.toNativeUtf8();
     final paramPathUtf8 = paramPath.toNativeUtf8();
@@ -100,7 +107,7 @@ abstract class YoloxBase with Store {
     final objects = <YoloxObject>[];
     if (err == yo.YOLOX_OK) {
       final num = detectResult.ref.object_num;
-      for (int i = 0; i < num; i++) {
+      for (int i=0; i<num; i++) {
         final o = detectResult.ref.object.elementAt(i).ref;
         final obj = YoloxObject();
         obj.label = o.label;
@@ -108,6 +115,23 @@ abstract class YoloxBase with Store {
         obj.rect = Rect.fromLTWH(o.rect.x, o.rect.y, o.rect.w, o.rect.h);
         objects.add(obj);
       }
+    } else {
+      print('error');
+    /*showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Error"),
+          content: Text("メッセージ内容"),
+          actions: [
+            TextButton(
+              child: Text("OK"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );*/
     }
 
     calloc
@@ -138,7 +162,16 @@ abstract class YoloxBase with Store {
       {AssetBundle? bundle,
       String? package,
       bool notCopyIfExist = false}) async {
+      //final f = WFile(assetName);
+      /*final _tempDirectory = await getTemporaryDirectory();
+      print(_tempDirectory);
+      final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+      print(appDocumentsDir);
+      print('_copyAssetToLocal');*/
     final docDir = await getApplicationDocumentsDirectory();
+    /*if (docDir == null) {
+      throw MissingPlatformDirectoryException('Unable to get application documents directory');
+    }*/
     final filePath = join(docDir.path, assetName);
 
     if (notCopyIfExist &&
@@ -146,8 +179,7 @@ abstract class YoloxBase with Store {
       return filePath;
     }
 
-    final keyName =
-        package == null ? assetName : 'packages/$package/$assetName';
+    final keyName = package == null ? assetName : 'packages/$package/$assetName';
     final data = await (bundle ?? rootBundle).load(keyName);
 
     final file = File(filePath)..createSync(recursive: true);

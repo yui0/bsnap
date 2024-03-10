@@ -59,6 +59,30 @@ class _HomePageState extends State<HomePage> {
     _yoloxStore.detect(_imageStore.loadFuture.data!);
   }
 
+  void _styleImage() {
+    //print('click');
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("タイトル"),
+          content: Text("メッセージ内容"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text("OK"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+    _yoloxStore.detect(_imageStore.loadFuture.data!);
+  }
+
   @override
   Widget build(BuildContext context) {
     const pad = 20.0;
@@ -76,8 +100,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
                 flex: 1,
                 child: Observer(builder: (context) {
-                  if (_imageStore.loadFuture.futureState ==
-                      FutureState.loading) {
+                  if (_imageStore.loadFuture.futureState == FutureState.loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
@@ -107,6 +130,13 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                     child: const Text('Pick image'),
                     onPressed: () => _debounce('_pickImage', _pickImage),
+                  ),
+                ),
+                const SizedBox(width: pad),
+                Expanded(
+                  child: ElevatedButton(
+                    child: const Text('Style'),
+                    onPressed: () => _debounce('_styleImage', _styleImage),
                   ),
                 ),
                 const SizedBox(width: pad),

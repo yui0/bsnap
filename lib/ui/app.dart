@@ -1,3 +1,4 @@
+//import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,20 @@ class MyApp extends StatelessWidget {
             ),
             home: const HomePage(title: 'bsnap'),
           );
+/*PlatformProvider(
+  builder: (context) => 
+    PlatformTheme(
+      builder: (context) => PlatformApp(
+        localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+          DefaultMaterialLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+        ],
+        title: 'Flutter Platform Widgets',
+        home: _YourHomePage_(),
+     ),
+  ),
+);*/
         },
       ),
     );

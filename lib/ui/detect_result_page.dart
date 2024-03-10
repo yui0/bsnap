@@ -63,13 +63,11 @@ class _DetectResultPageState extends State<DetectResultPage> {
                 '\nloadTime: ${(data.loadTime.inMicroseconds * 0.001).toStringAsFixed(2)} ms';
 
             if (_yoloxStore.detectFuture.futureState == FutureState.initial) {
-            } else if (_yoloxStore.detectFuture.futureState ==
-                FutureState.loading) {
+            } else if (_yoloxStore.detectFuture.futureState == FutureState.loading) {
               message += '\ndetect ...';
             } else {
               if (_yoloxStore.detectFuture.errorMessage != null) {
-                message +=
-                    '\ndetect error: ${_yoloxStore.detectFuture.errorMessage}';
+                message += '\ndetect error: ${_yoloxStore.detectFuture.errorMessage}';
               } else {
                 final result = _yoloxStore.detectFuture.data;
                 if (result == null) {
