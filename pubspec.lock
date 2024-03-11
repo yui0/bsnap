@@ -464,10 +464,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.0+1"
-  ncnn_yolox:
+  ncnn_ai:
     dependency: "direct main"
     description:
-      path: ncnn
+      path: ncnn_ai
       relative: true
     source: path
     version: "0.0.1"

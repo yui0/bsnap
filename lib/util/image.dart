@@ -44,7 +44,7 @@ Future<ImageData> loadImage(String? imagePath) async {
 
   img.Image? image;
   if (imagePath == null) {
-    image = await loadAsset('assets/dog.jpg', package: 'ncnn_yolox');
+    image = await loadAsset('assets/dog.jpg', package: 'ncnn_ai');
     imagePath = '@assets/dog.jpg';
     log.info('loadAsset imagePath=$imagePath');
   } else {

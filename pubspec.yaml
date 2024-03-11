@@ -46,8 +46,8 @@ dependencies:
   flutter_mobx: ^2.0.6+5
   provider: ^6.0.5
 
-  ncnn_yolox:
-    path: ./ncnn
+  ncnn_ai:
+    path: ./ncnn_ai
   image: ^4.0.17
   easy_debounce: ^2.0.3
   path_provider: ^2.0.15

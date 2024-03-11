@@ -57,7 +57,7 @@ flutter run
 ## References
 
 - [nihui/ncnn-android-yolox](https://github.com/nihui/ncnn-android-yolox)
-- [KoheiKanagu/ncnn_yolox_flutter](https://github.com/KoheiKanagu/ncnn_yolox_flutter)
+- [KoheiKanagu/ncnn_ai_flutter](https://github.com/KoheiKanagu/ncnn_ai_flutter)
 - [tomassasovsky/ncnn.dart](https://github.com/tomassasovsky/ncnn.dart)
 - https://github.com/ikuokuo/start-flutter/tree/main?tab=readme-ov-file
 

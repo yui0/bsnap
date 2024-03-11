@@ -6,12 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:mobx/mobx.dart';
 
-import 'package:ncnn_yolox/ncnn_yolox_bindings_generated.dart' as yo;
+import 'package:ncnn_ai/ncnn_ai_bindings_generated.dart' as yo;
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 //import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 //import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-//import 'package:wfile/wfile.dart';
 
 import '../util/image.dart';
 import '../util/log.dart';
@@ -37,7 +36,7 @@ abstract class YoloxBase with Store {
 
   YoloxBase() {
     final dylib = Platform.isAndroid || Platform.isLinux
-        ? DynamicLibrary.open('libncnn_yolox.so')
+        ? DynamicLibrary.open('libncnn_ai.so')
         : DynamicLibrary.process();
 
     _yolox = yo.NcnnYoloxBindings(dylib);
@@ -66,9 +65,9 @@ abstract class YoloxBase with Store {
     final modelPath = 'assets/yolox_nano_fp16.bin';
     final paramPath = 'assets/yolox_nano_fp16.param';
     /*final modelPath = await _copyAssetToLocal('assets/yolox_nano_fp16.bin',
-        package: 'ncnn_yolox', notCopyIfExist: false);
+        package: 'ncnn_ai', notCopyIfExist: false);
     final paramPath = await _copyAssetToLocal('assets/yolox_nano_fp16.param',
-        package: 'ncnn_yolox', notCopyIfExist: false);*/
+        package: 'ncnn_ai', notCopyIfExist: false);*/
     log.info('yolox modelPath=$modelPath');
     log.info('yolox paramPath=$paramPath');
     //print('yolox modelPath=$modelPath');
