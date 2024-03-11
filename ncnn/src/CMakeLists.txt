@@ -10,10 +10,10 @@ get_filename_component(MY_PROJ ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 # packages
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  set(ncnn_DIR "${MY_PROJ}/linux/ncnn-20230517-ubuntu-2204-shared/lib/cmake/ncnn")
+  set(ncnn_DIR "${MY_PROJ}/linux/ncnn-20240102-ubuntu-2204-shared/lib/cmake/ncnn")
   #set(OpenCV_DIR "${MY_PROJ}/linux/opencv-mobile-4.9.0-ubuntu-2204/lib/cmake/opencv4")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Android")
-  set(ncnn_DIR "${MY_PROJ}/android/ncnn-20230517-android-vulkan-shared/${ANDROID_ABI}/lib/cmake/ncnn")
+  set(ncnn_DIR "${MY_PROJ}/android/ncnn-20240102-android-vulkan-shared/${ANDROID_ABI}/lib/cmake/ncnn")
   #set(OpenCV_DIR "${MY_PROJ}/android/opencv-mobile-4.6.0-android/sdk/native/jni")
 else()
   message(FATAL_ERROR "system not support: ${CMAKE_SYSTEM_NAME}")
