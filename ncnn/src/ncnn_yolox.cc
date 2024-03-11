@@ -2,12 +2,14 @@
 
 #include <cstdlib>
 
+#if 0
 #if defined(USE_NCNN_SIMPLEOCV)
 #include "simpleocv.h"
 #else
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#endif
 #endif
 
 // ncnn
@@ -297,8 +299,16 @@ FFI_PLUGIN_EXPORT void detectResultDestroy(struct DetectResult *result) {
   result = NULL;
 }
 
+/*#define STB_IMAGE_RESIZE_IMPLEMENTATION
+#define STB_IMAGE_RESIZE_STATIC
+#include "stb_image_resize.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"*/
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 FFI_PLUGIN_EXPORT yolox_err_t detectWithImagePath(
     struct YoloX *yolox, const char *image_path, struct DetectResult *result) {
+#if 0
   cv::Mat bgr = cv::imread(image_path, 1);
   if (bgr.empty()) {
     fprintf(stderr, "cv::imread %s failed\n", image_path);
@@ -309,6 +319,11 @@ FFI_PLUGIN_EXPORT yolox_err_t detectWithImagePath(
   int img_h = bgr.rows;
   return detectWithPixels(
       yolox, bgr.data, /*ncnn::Mat::*/PIXEL_BGR, img_w, img_h, result);
+#endif
+	uint8_t *pixels;
+	int w, h, bpp;
+	pixels = stbi_load(image_path, &w, &h, &bpp, 3);
+	return detectWithPixels(yolox, pixels, PIXEL_RGB, w, h, result);
 }
 
 FFI_PLUGIN_EXPORT yolox_err_t detectWithPixels(

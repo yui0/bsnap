@@ -3,13 +3,13 @@
 #include <cstdio>
 #include <string>
 
-#if defined(USE_NCNN_SIMPLEOCV)
+/*#if defined(USE_NCNN_SIMPLEOCV)
 #include "simpleocv.h"
 #else
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#endif
+#endif*/
 
 static void draw_objects(const char *image_path, DetectResult *detect_result);
 
@@ -65,7 +65,7 @@ static void draw_objects(const char *image_path, DetectResult *detect_result) {
     "hair drier", "toothbrush"
   };
 
-  cv::Mat image = cv::imread(image_path, 1);
+  /*cv::Mat image = cv::imread(image_path, 1);
   if (image.empty()) {
     fprintf(stderr, "cv::imread %s failed\n", image_path);
     return;
@@ -101,5 +101,5 @@ static void draw_objects(const char *image_path, DetectResult *detect_result) {
   }
 
   cv::imshow("image", image);
-  cv::waitKey(0);
+  cv::waitKey(0);*/
 }
