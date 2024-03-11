@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/services.dart';
+//import 'package:flutter/widgets.dart'; // for Image
 import 'package:image/image.dart' as img;
 import 'package:mobx/mobx.dart';
 
@@ -32,14 +33,45 @@ class YoloxResult {
 }
 
 abstract class YoloxBase with Store {
-  late yo.NcnnYoloxBindings _yolox;
+  late yo.NcnnYoloxBindings _ncnn_ai;
 
   YoloxBase() {
     final dylib = Platform.isAndroid || Platform.isLinux
         ? DynamicLibrary.open('libncnn_ai.so')
         : DynamicLibrary.process();
 
-    _yolox = yo.NcnnYoloxBindings(dylib);
+    _ncnn_ai = yo.NcnnYoloxBindings(dylib);
+  }
+
+  @action
+  Uint8List style(ImageData data) {
+    final pixels = data.image.getBytes(order: img.ChannelOrder.rgb);
+    final pixelsPtr = calloc.allocate<Uint8>(pixels.length);
+    for (int i=0; i<pixels.length; i++) {
+      pixelsPtr[i] = pixels[i];
+    }
+
+    final outPtr = calloc.allocate<Uint8>(512*512*3);
+    final err = _ncnn_ai.styletransfer(
+        'assets/face_paint_512_v2'.toNativeUtf8().cast(),
+        pixelsPtr,
+        data.image.width,
+        data.image.height,
+        outPtr,
+        512,
+        512);
+    print(err);
+
+    Uint8List encodedImBytes = outPtr.asTypedList(512*512*3);
+    //img.Image outImg = img.Image.fromBytes(512, 512, encodedImBytes);
+    //img.Image outImg = img.Image.memory(Uint8List.fromList(outPtr));
+    //Image image = Image(image:MemoryImage(encodedImBytes));
+
+    calloc
+      ..free(outPtr)
+      ..free(pixelsPtr);
+    //return outPtr;
+    return encodedImBytes;
   }
 
   @observable
@@ -76,7 +108,7 @@ abstract class YoloxBase with Store {
     final modelPathUtf8 = modelPath.toNativeUtf8();
     final paramPathUtf8 = paramPath.toNativeUtf8();
 
-    final yolox = _yolox.yoloxCreate();
+    final yolox = _ncnn_ai.yoloxCreate();
     yolox.ref.model_path = modelPathUtf8.cast();
     yolox.ref.param_path = paramPathUtf8.cast();
     yolox.ref.nms_thresh = 0.45;
@@ -84,18 +116,18 @@ abstract class YoloxBase with Store {
     yolox.ref.target_size = 416;
     // yolox.ref.target_size = 640;
 
-    final detectResult = _yolox.detectResultCreate();
+    final detectResult = _ncnn_ai.detectResultCreate();
 
     final pixels = data.image.getBytes(order: img.ChannelOrder.bgr);
     // Pass Uint8List to Pointer<Void>
     //  https://github.com/dart-lang/ffi/issues/27
     //  https://github.com/martin-labanic/camera_preview_ffi_image_processing/blob/master/lib/image_worker.dart
     final pixelsPtr = calloc.allocate<Uint8>(pixels.length);
-    for (int i = 0; i < pixels.length; i++) {
+    for (int i=0; i<pixels.length; i++) {
       pixelsPtr[i] = pixels[i];
     }
 
-    final err = _yolox.detectWithPixels(
+    final err = _ncnn_ai.detectWithPixels(
         yolox,
         pixelsPtr,
         yo.PixelType.PIXEL_BGR,
@@ -138,8 +170,8 @@ abstract class YoloxBase with Store {
       ..free(modelPathUtf8)
       ..free(paramPathUtf8);
 
-    _yolox.detectResultDestroy(detectResult);
-    _yolox.yoloxDestroy(yolox);
+    _ncnn_ai.detectResultDestroy(detectResult);
+    _ncnn_ai.yoloxDestroy(yolox);
 
     // final objects = List<YoloxObject>.generate(5, (i) {
     //   final obj = YoloxObject();

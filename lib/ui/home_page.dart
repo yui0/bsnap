@@ -1,3 +1,9 @@
+//---------------------------------------------------------
+//	ncnn-ai
+//
+//		©2024 Yuichiro Nakada
+//---------------------------------------------------------
+
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -7,19 +13,11 @@ import 'package:provider/provider.dart';
 import '../store/stores.dart';
 import 'detect_result_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
 class _HomePageState extends State<HomePage> {
   late ImageStore _imageStore;
   late YoloxStore _yoloxStore;
   late OptionStore _optionStore;
+  var outImage;
 
   @override
   void initState() {
@@ -33,6 +31,11 @@ class _HomePageState extends State<HomePage> {
     _optionStore = Provider.of<OptionStore>(context);
 
     _imageStore.load();
+
+    //outImage = Image.network('https://images.unsplash.com/photo-1516750484197-6b28d10c91ea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
+    //Uint8List blankBytes = Base64Codec().decode("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+    //Uint8List blankBytes;
+    //Image.memory(blankBytes, height:1,);
 
     super.didChangeDependencies();
   }
@@ -80,7 +83,14 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-    _yoloxStore.detect(_imageStore.loadFuture.data!);
+    //_yoloxStore.detect(_imageStore.loadFuture.data!);
+    //_imageStore.loadFuture.data.imageUi = _yoloxStore.style(_imageStore.loadFuture.data!);
+    outImage = _yoloxStore.style(_imageStore.loadFuture.data!);
+    //print(outImage);
+    //_imageStore.loadFuture.data.imageUi = im;
+    //_imageStore.loadFuture.data = Image.memory(im, 512, 512);
+    //_imageStore.loadFuture.data = Image.memory(_yoloxStore.style(_imageStore.loadFuture.data!), 512, 512);
+    //Uint8List im = _yoloxStore.style(_imageStore.loadFuture.data!);
   }
 
   @override
@@ -122,6 +132,16 @@ class _HomePageState extends State<HomePage> {
                     child: DetectResultPage(imageData: data),
                   );
                 })),
+                //Image.network('https://images.unsplash.com/photo-1516750484197-6b28d10c91ea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'),
+                //Image.memory(outImage),
+            Expanded(
+                child: Observer(builder: (context) {
+                  if (outImage == null) {
+                    return const Center(child: Text('Image load null :('));
+                  }
+                  return Image.memory(outImage);
+                })
+            ),
             const SizedBox(height: pad),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -166,4 +186,13 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
 }

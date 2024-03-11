@@ -10,6 +10,17 @@ import 'log.dart';
 //  https://medium.com/@ys.commerciale/process-and-show-an-image-in-flutter-aebb0054ce94
 //  https://stackoverflow.com/a/60356791
 
+/*Future<ui.Image> bytesToImage(Uint8List imgBytes) async {
+  ui.Codec codec = await ui.instantiateImageCodec(imgBytes);
+  ui.FrameInfo frame;
+  try {
+    frame = await codec.getNextFrame();
+  } finally {
+    codec.dispose();
+  }
+  return frame.image;
+}*/
+
 Future<img.Image?> loadAsset(String assetName,
     {AssetBundle? bundle, String? package}) async {
   final keyName = package == null ? assetName : 'packages/$package/$assetName';

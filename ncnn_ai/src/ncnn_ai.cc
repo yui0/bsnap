@@ -28,6 +28,7 @@ FFI_PLUGIN_EXPORT int styletransfer(const char *model, uint8_t *p, int w, int h,
 	sprintf(model_path, "%s.bin", model);
 	int ret0 = net.load_param(param_path);
 	int ret1 = net.load_model(model_path);
+	fprintf(stderr, "%s load %d %d\n", model, ret0, ret1);
 
 	const float mean_vals[] = { 127.5f, 127.5f,  127.5f };
 	const float norm_vals[] = { 1 / 127.5f, 1 / 127.5f, 1 / 127.5f };
